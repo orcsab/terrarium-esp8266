@@ -8,7 +8,7 @@
 
 #include "TerrServer.h"
 #include "TerrDHT11.h"
-#include "TerrLight.h"
+#include "TerrPhoto.h"
 
 int TerrServer::_port;
 int TerrServer::_statusPin;
@@ -17,8 +17,13 @@ ESP8266WebServer *TerrServer::_server;
 /* Constructor.
  * Initialize the web server and setup the handlers I want specifically for the
  * terrarium.
+ * name: the device name on the .local domain for this device.
+ * ssid: the SSID for the wireless network
+ * pass: the wireless network password
+ * port: port for the web server
+ * statusPin: pin number for LED to use for progress/activity blinks
  */
-void TerrServer::init (const char *ssid, const char *pass, int port, int statusPin=-1) {
+void TerrServer::init (const char *name, const char *ssid, const char *pass, int port, int statusPin=-1) {
   _port = port;
   _statusPin = statusPin;
 
@@ -38,7 +43,7 @@ void TerrServer::init (const char *ssid, const char *pass, int port, int statusP
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("esp8266")) {
+  if (MDNS.begin(name)) {
     Serial.println("MDNS responder started");
   }
 
@@ -84,7 +89,7 @@ void TerrServer::_handleRoot (void) {
       <!-- <img src=\"/test.svg\" />  --> \
     </body>\
     </html>",
-    hr, min % 60, sec % 60, TerrLight::lightDesc(),
+    hr, min % 60, sec % 60, TerrPhoto::desc(),
     TerrDHT11::lastValues.temperature, TerrDHT11::lastValues.humidity, TerrDHT11::dht.getStatusString()
   );
   _server->send(200, "text/html", temp);

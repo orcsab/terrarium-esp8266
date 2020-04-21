@@ -7,6 +7,7 @@
 
 namespace TerrLight {
   const char* lightDesc();
+  const char* update();
 }
 
 #endif // _TERRLIGHT_H
