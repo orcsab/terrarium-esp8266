@@ -9,9 +9,16 @@
 #include <DHTesp.h>
 
 namespace TerrDHT11 {
-  extern DHTesp dht;
-  extern char *lastStatus;
-  extern TempAndHumidity lastValues;
+  extern DHTesp _dht;
+  extern unsigned int _dhtPin;
+  extern const char *_lastStatus;
+  extern TempAndHumidity _lastValues;
+
+  void init (unsigned int);
+  void update ();
+  static float temp () {return _lastValues.temperature;};
+  static float humidity () {return _lastValues.humidity;};
+  static const char *lastStatus () {return _lastStatus;};
 }
 
 #endif // _TERRDHT11_H

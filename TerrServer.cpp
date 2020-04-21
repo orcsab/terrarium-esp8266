@@ -23,7 +23,7 @@ ESP8266WebServer *TerrServer::_server;
  * port: port for the web server
  * statusPin: pin number for LED to use for progress/activity blinks
  */
-void TerrServer::init (const char *name, const char *ssid, const char *pass, int port, int statusPin=-1) {
+void TerrServer::init (const char *name, const char *ssid, const char *pass, int port, int statusPin) {
   _port = port;
   _statusPin = statusPin;
 
@@ -65,8 +65,7 @@ void TerrServer::handleClient () {
 /* Handler for calls to HTML root.
  */
 void TerrServer::_handleRoot (void) {
-  if (_statusPin >= 0)
-    digitalWrite(_statusPin, HIGH);
+  digitalWrite(_statusPin, HIGH);
 
   char temp[400];
   int sec = millis() / 1000;
@@ -90,12 +89,12 @@ void TerrServer::_handleRoot (void) {
     </body>\
     </html>",
     hr, min % 60, sec % 60, TerrPhoto::desc(),
-    TerrDHT11::lastValues.temperature, TerrDHT11::lastValues.humidity, TerrDHT11::dht.getStatusString()
+    TerrDHT11::temp(), TerrDHT11::humidity(), TerrDHT11::lastStatus()
   );
   _server->send(200, "text/html", temp);
 
-  if (_statusPin >= 0)
-    digitalWrite(_statusPin, LOW);
+
+  digitalWrite(_statusPin, LOW);
 }
 
 /* _handleNotFound
@@ -103,8 +102,7 @@ void TerrServer::_handleRoot (void) {
  * defined.
  */
 void TerrServer::_handleNotFound () {
-  if (_statusPin >= 0)
-    digitalWrite(_statusPin, HIGH);
+  digitalWrite(_statusPin, HIGH);
 
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -121,6 +119,5 @@ void TerrServer::_handleNotFound () {
 
   _server->send(404, "text/plain", message);
 
-  if (_statusPin >= 0)
-    digitalWrite(_statusPin, LOW);
+  digitalWrite(_statusPin, LOW);
 }
