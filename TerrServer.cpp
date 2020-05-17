@@ -23,29 +23,11 @@ ESP8266WebServer *TerrServer::_server;
  * port: port for the web server
  * statusPin: pin number for LED to use for progress/activity blinks
  */
-void TerrServer::init (const char *name, const char *ssid, const char *pass, int port, int statusPin) {
+void TerrServer::init (int port, int statusPin) {
   _port = port;
   _statusPin = statusPin;
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, pass);
-  Serial.println("");
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  if (MDNS.begin(name)) {
-    Serial.println("MDNS responder started");
-  }
 
   _server = new ESP8266WebServer(port);
   _server->on("/", _handleRoot);

@@ -1,8 +1,9 @@
-#!/bin/zsh
+#!/usr/bin/bash
 RED="\033[1;31m"
 NOCOLOR="\033[0m"
 
-SERIAL="/dev/cu.usbserial-0001"
+#SERIAL="/dev/cu.usbserial-0001"
+SERIAL="COM4"
 FQBN="esp8266:esp8266:nodemcuv2"
 
 echo "compile line: arduino-cli -compile --fqbn $FQBN ."

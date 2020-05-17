@@ -9,7 +9,7 @@
 #include <ESP8266WebServer.h>
 
 namespace TerrServer {
-  void init (const char *, const char *, const char *, int port, int statusPin);
+  void init (int port, int statusPin);
   void handleClient ();
 
   // Webserver port number
